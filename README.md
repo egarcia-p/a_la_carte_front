@@ -1,4 +1,4 @@
-# A La Carte Front End
+# A La Carte Front
 Front End repository for the A La Carte app
 # Getting Started with Create React App
 
