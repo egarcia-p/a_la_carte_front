@@ -1,0 +1,157 @@
+import React from "react";
+import { render } from "react-dom";
+import { Link } from "react-router-dom";
+import Section from "./Section";
+
+class RecipeSteps extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      recipe: {},
+      steps: [{ description: "Desc step 1", step_number: 1 }],
+      sections: [
+        {
+          id: 1,
+          name: "Section Test 1",
+          steps: [{ description: "Desc step 1", step_number: 1 }],
+        },
+        {
+          id: 2,
+          name: "Section Test 1",
+          steps: [],
+        },
+      ],
+      section_id: "",
+      recipe_id: "",
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onNewSectionClick = this.onNewSectionClick.bind(this);
+    this.onNewStepClick = this.onNewStepClick.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.stripHtmlEntities = this.stripHtmlEntities.bind(this);
+  }
+
+  componentDidMount() {
+    Promise.all([
+      fetch(`/api/v1/recipe/edit/${this.props.match.params.id}`),
+      fetch(`/api/v1/steps/find_by_recipe_id/${this.props.match.params.id}`),
+    ])
+      .then(([res1, res2]) => {
+        return Promise.all([res1.json(), res2.json()]);
+      })
+      .then(([res1, res2]) => {
+        this.setState({
+          recipe: res1,
+          steps: res2,
+          recipe_id: this.props.match.params.id,
+          section_id: 1,
+        });
+      });
+  }
+
+  stripHtmlEntities(str) {
+    return String(str).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  submitStep(step) {
+    const url = `/api/v1/steps/create`;
+    const { name, category_id } = this.state;
+    description = step.description;
+    step_number = step.step_number;
+    section_id = step.section_id;
+    recipe_id = step.recipe_id;
+
+    //validate?
+    //if (name.length == 0 || category_id == 0) return;
+
+    const body = {
+      description,
+      step_number,
+      section_id,
+      recipe_id,
+    };
+    console.log(body);
+
+    const token = document.querySelector('meta[name="csrf-token"]').content;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok.");
+      })
+      .then((response) => this.props.history.push(`/recipe/${recipe_id}`))
+      .catch((error) => console.log(error.message));
+  }
+
+  //How to do in bulk?
+  onSubmit(event) {
+    event.preventDefault();
+    const { steps } = this.state;
+
+    //how to handle responses async? maybe is better to send full body and do server side? yes
+  }
+
+  //TODO fix this code
+  onNewStepClick(section) {
+    const newStep = { id: "", description: "New Step", step_number: "1" };
+    console.log(this);
+    const { sections } = this.state;
+    section.this.setState({ sections: [...sections, newSection] });
+  }
+
+  AddStepButton = () => {
+    return <button onClick={this.onNewStepClick}>Add a new step</button>;
+  };
+
+  onNewSectionClick() {
+    const newSection = { id: "", name: "Insert Name", steps: [] };
+    console.log(this);
+    const { sections } = this.state;
+    this.setState({ sections: [...sections, newSection] });
+  }
+
+  AddSectionButton = () => {
+    return <button onClick={this.onNewSectionClick}>Add a new section</button>;
+  };
+
+  render() {
+    const { steps, sections, recipe_id } = this.state;
+    console.log(sections.length);
+
+    return (
+      <div className="container mt-5">
+        <div className="row">
+          <div className="col-sm-12 col-lg-6 offset-lg-3">
+            <h1 className="font-weight-normal mb-5">
+              Add Steps for Recipe: {recipe_id}
+            </h1>
+            {steps.size == 0 && <this.AddStepButton></this.AddStepButton>}
+            <this.AddSectionButton></this.AddSectionButton>
+            {sections.map((section) => (
+              <Section section={section}></Section>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+
+    //Create subcomponent RecipeStep
+    //Send handlers for saving steps as a whole
+    //On subcomponent use steps object for filling form for description, step number ....
+  }
+}
+
+export default RecipeSteps;
