@@ -1,10 +1,10 @@
-import React from "react";
-import { Form, Formik } from "formik";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Form, Formik } from 'formik'
+import { Link } from 'react-router-dom'
 
 export default class NewTag extends React.Component {
   render() {
-    const { history } = this.props;
+    const { history } = this.props
     return (
       <div className="container mt-5">
         <div className="row">
@@ -12,36 +12,36 @@ export default class NewTag extends React.Component {
             <h1 className="font-weight-normal mb-5">Create Tag</h1>
 
             <Formik
-              initialValues={{ name: "", color: "" }}
+              initialValues={{ name: '', color: '' }}
               validate={(values) => {
-                const errors = {};
+                const errors = {}
                 if (!values.name) {
-                  errors.name = "Required";
+                  errors.name = 'Required'
                 }
-                return errors;
+                return errors
               }}
               onSubmit={(values, { setSubmitting }) => {
-                const url = "/api/v1/tags/create";
+                const url = '/api/v1/tags/create'
 
                 const token = document.querySelector(
                   'meta[name="csrf-token"]'
-                ).content;
+                ).content
                 fetch(url, {
-                  method: "POST",
+                  method: 'POST',
                   headers: {
-                    "X-CSRF-Token": token,
-                    "Content-Type": "application/json",
+                    'X-CSRF-Token': token,
+                    'Content-Type': 'application/json',
                   },
                   body: JSON.stringify(values, null, 2),
                 })
                   .then((response) => {
                     if (response.ok) {
-                      return response.json();
+                      return response.json()
                     }
-                    throw new Error("Network response was not ok.");
+                    throw new Error('Network response was not ok.')
                   })
                   .then((response) => this.props.history.push(`/tags`))
-                  .catch((error) => console.log(error.message));
+                  .catch((error) => console.log(error.message))
               }}
             >
               {({
@@ -94,6 +94,6 @@ export default class NewTag extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }

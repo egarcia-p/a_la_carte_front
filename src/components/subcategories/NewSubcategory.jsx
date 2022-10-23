@@ -1,74 +1,74 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 class NewSubcategory extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      name: "",
+      name: '',
       categories: [],
-    };
+    }
 
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.stripHtmlEntities = this.stripHtmlEntities.bind(this);
+    this.onChange = this.onChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.stripHtmlEntities = this.stripHtmlEntities.bind(this)
   }
 
   componentDidMount() {
-    const url = `/api/v1/categories/index`;
+    const url = `/api/v1/categories/index`
     fetch(url)
       .then((response) => {
-        console.log(response);
+        console.log(response)
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then((response) => this.setState({ categories: response }))
-      .catch((error) => console.log(error.message));
+      .catch((error) => console.log(error.message))
   }
 
   stripHtmlEntities(str) {
-    return String(str).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return String(str).replace(/</g, '&lt;').replace(/>/g, '&gt;')
   }
 
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   onSubmit(event) {
-    event.preventDefault();
-    const url = "/api/v1/subcategories/create";
-    const { name, category_id } = this.state;
+    event.preventDefault()
+    const url = '/api/v1/subcategories/create'
+    const { name, category_id } = this.state
 
-    if (name.length == 0) return;
+    if (name.length == 0) return
 
     const body = {
       name,
       category_id,
-    };
+    }
 
-    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const token = document.querySelector('meta[name="csrf-token"]').content
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
-      .then((response) => this.props.history.push("/subcategories"))
-      .catch((error) => console.log(error.message)); //maybe add error messages
+      .then((response) => this.props.history.push('/subcategories'))
+      .catch((error) => console.log(error.message)) //maybe add error messages
   }
 
   render() {
-    const { categories } = this.state;
+    const { categories } = this.state
     return (
       <div className="container mt-5">
         <div className="row">
@@ -98,7 +98,9 @@ class NewSubcategory extends React.Component {
                 >
                   <option id="blank">Open this select menu</option>
                   {categories.map((option) => (
-                    <option key={option.id} value={option.id}>{option.name}</option>
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -112,8 +114,8 @@ class NewSubcategory extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default NewSubcategory;
+export default NewSubcategory

@@ -1,79 +1,74 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 class EditCategory extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      name: "",
-      category: {}
-    };
+      name: '',
+      category: {},
+    }
 
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.stripHtmlEntities = this.stripHtmlEntities.bind(this);
+    this.onChange = this.onChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.stripHtmlEntities = this.stripHtmlEntities.bind(this)
   }
 
   componentDidMount() {
-    const url = `/api/v1/categories/edit/${this.props.match.params.id}`;
-    console.log(url);
+    const url = `/api/v1/categories/edit/${this.props.match.params.id}`
+    console.log(url)
     fetch(url)
       .then((response) => {
-        console.log(response);
+        console.log(response)
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
-      .then((response) => this.setState({ category : response }))
-      .catch(() => console.log("error"));
+      .then((response) => this.setState({ category: response }))
+      .catch(() => console.log('error'))
   }
 
   stripHtmlEntities(str) {
-    return String(str).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return String(str).replace(/</g, '&lt;').replace(/>/g, '&gt;')
   }
 
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   onSubmit(event) {
-    event.preventDefault();
-    const url = `/api/v1/categories/update/${this.props.match.params.id}`;
-    const {
-      name
-    } = this.state;
+    event.preventDefault()
+    const url = `/api/v1/categories/update/${this.props.match.params.id}`
+    const { name } = this.state
 
-    if (
-      name.length == 0
-    )
-      return;
+    if (name.length == 0) return
 
     const body = {
-      name
-    };
+      name,
+    }
 
-    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const token = document.querySelector('meta[name="csrf-token"]').content
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then((response) => this.props.history.push('/categories'))
-      .catch((error) => console.log(error.message));
+      .catch((error) => console.log(error.message))
   }
 
   render() {
-    const { category } = this.state;
+    const { category } = this.state
     return (
       <div className="container mt-5">
         <div className="row">
@@ -104,8 +99,8 @@ class EditCategory extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default EditCategory;
+export default EditCategory

@@ -1,55 +1,55 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 class Tags extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       tags: [],
-    };
+    }
   }
 
   componentDidMount() {
-    const url = "/api/v1/tags/index";
+    const url = '/api/v1/tags/index'
     fetch(url)
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then((response) => this.setState({ tags: response }))
-      .catch(() => this.props.history.push("/"));
+      .catch(() => this.props.history.push('/'))
   }
 
   deleteTag(id) {
-    const { history } = this.props;
-    const url = `/api/v1/tags/destroy/${id}`;
-    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const { history } = this.props
+    const url = `/api/v1/tags/destroy/${id}`
+    const token = document.querySelector('meta[name="csrf-token"]').content
 
     fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then(() => this.componentDidMount())
-      .catch((error) => console.log(error.message));
+      .catch((error) => console.log(error.message))
   }
 
   setColor(tag) {
-    return tag.color;
+    return tag.color
   }
 
   render() {
-    const { tags } = this.state;
+    const { tags } = this.state
     const allTags = tags.map((tag, index) => (
       <tr key={index}>
         <th scope="row">{tag.id}</th>
@@ -67,10 +67,7 @@ class Tags extends React.Component {
           </label>
         </td>
         <td>
-          <button
-            type="button"
-            className="btn btn-warning"
-          >
+          <button type="button" className="btn btn-warning">
             <Link to={`/tag/${tag.id}`}>Edit Tag</Link>
           </button>
           <button
@@ -82,7 +79,7 @@ class Tags extends React.Component {
           </button>
         </td>
       </tr>
-    ));
+    ))
     const noTag = (
       <td colspan="5">
         <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
@@ -91,7 +88,7 @@ class Tags extends React.Component {
           </h4>
         </div>
       </td>
-    );
+    )
 
     return (
       <>
@@ -127,7 +124,7 @@ class Tags extends React.Component {
           </main>
         </div>
       </>
-    );
+    )
   }
 }
-export default Tags;
+export default Tags

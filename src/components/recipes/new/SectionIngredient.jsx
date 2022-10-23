@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import RecipeIngredient from "./RecipeIngredient";
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import RecipeIngredient from './RecipeIngredient'
 
 const SectionNameInput = (props) => {
   return (
@@ -12,41 +12,41 @@ const SectionNameInput = (props) => {
       required
       onChange={props.updateName}
     />
-  );
-};
+  )
+}
 
 const SectionIngredient = (props) => {
-  const section = props.section;
-  const sectionIndex = props.sectionIndex;
-  const setSectionsMap = props.setSectionsMap;
-  const listIngredients = props.listIngredients;
-  const listUoms = props.listUoms;
+  const section = props.section
+  const sectionIndex = props.sectionIndex
+  const setSectionsMap = props.setSectionsMap
+  const listIngredients = props.listIngredients
+  const listUoms = props.listUoms
   //const sections = props.sections;
   //const nameRef = useRef();
-  const [name, setName] = useState(section.name);
+  const [name, setName] = useState(section.name)
 
   /*Event Handlers */
   const AddIngredientButton = () => {
-    return <button onClick={onNewIngredientClick}>Add a new ingredient</button>;
-  };
+    return <button onClick={onNewIngredientClick}>Add a new ingredient</button>
+  }
 
   const DeleteIngredientButton = (pr) => {
     const handleClick = () => {
-      pr.onButtonClick(pr.ingredientIndex);
-    };
-    return <button onClick={handleClick}>Delete Ingredient</button>;
-  };
+      pr.onButtonClick(pr.ingredientIndex)
+    }
+    return <button onClick={handleClick}>Delete Ingredient</button>
+  }
 
   function onNewIngredientClick() {
     const newIngredient = {
       recipe_id: section.recipe_id,
-      ingredient_id: "",
-      uom_id: "",
+      ingredient_id: '',
+      uom_id: '',
       quantity: 1,
       section_id: section.id,
-    };
+    }
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
     const newSection = {
       id: section.id,
@@ -55,22 +55,22 @@ const SectionIngredient = (props) => {
       sort_number: section.sort_number,
       steps: section.steps,
       recipe_ingredients: [...section.recipe_ingredients, newIngredient],
-    };
-    sectionsMapCopy.set(sectionIndex, newSection);
+    }
+    sectionsMapCopy.set(sectionIndex, newSection)
 
-    setSectionsMap(sectionsMapCopy);
+    setSectionsMap(sectionsMapCopy)
   }
 
   function onIngredientDeleteClick(recipeIngredientIndex) {
     //todo get index
-    const index = recipeIngredientIndex;
-    console.log(`Index: ${index}`);
+    const index = recipeIngredientIndex
+    console.log(`Index: ${index}`)
 
-    const newIngredients = [...section.recipe_ingredients];
-    newIngredients.splice(index, 1);
-    console.log(newIngredients);
+    const newIngredients = [...section.recipe_ingredients]
+    newIngredients.splice(index, 1)
+    console.log(newIngredients)
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
     const newSection = {
       id: section.id,
@@ -78,17 +78,17 @@ const SectionIngredient = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       recipe_ingredients: newIngredients,
-    };
-    sectionsMapCopy.set(sectionIndex, newSection);
+    }
+    sectionsMapCopy.set(sectionIndex, newSection)
 
-    setSectionsMap(sectionsMapCopy);
+    setSectionsMap(sectionsMapCopy)
   }
 
   const updateName = (e) => {
-    const value = e.target.value;
-    setName(value);
+    const value = e.target.value
+    setName(value)
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
     // Replace the current section item
     const newSection = {
       id: section.id,
@@ -96,15 +96,15 @@ const SectionIngredient = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       recipe_ingredients: section.recipe_ingredients,
-    };
+    }
 
-    sectionsMapCopy.set(sectionIndex, newSection);
+    sectionsMapCopy.set(sectionIndex, newSection)
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
-  console.log(section);
+  console.log(section)
 
   return (
     <div className="section">
@@ -128,13 +128,16 @@ const SectionIngredient = (props) => {
               listIngredients={listIngredients}
               listUoms={listUoms}
             ></RecipeIngredient>
-            <DeleteIngredientButton onButtonClick={onIngredientDeleteClick} ingredientIndex={index}></DeleteIngredientButton>
+            <DeleteIngredientButton
+              onButtonClick={onIngredientDeleteClick}
+              ingredientIndex={index}
+            ></DeleteIngredientButton>
           </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 SectionIngredient.propTypes = {
   section: PropTypes.object,
@@ -146,11 +149,11 @@ SectionIngredient.propTypes = {
   setSectionsMap: PropTypes.func,
   listIngredients: PropTypes.array,
   listUoms: PropTypes.array,
-};
+}
 
 SectionNameInput.propTypes = {
   name: PropTypes.string,
   updateName: PropTypes.func,
-};
+}
 
-export default SectionIngredient;
+export default SectionIngredient

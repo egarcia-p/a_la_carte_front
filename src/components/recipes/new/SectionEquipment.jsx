@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import RecipeEquipment from "./RecipeEquipment";
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import RecipeEquipment from './RecipeEquipment'
 
 const SectionNameInput = (props) => {
   return (
@@ -12,39 +12,39 @@ const SectionNameInput = (props) => {
       required
       onChange={props.updateName}
     />
-  );
-};
+  )
+}
 
 const SectionEquipment = (props) => {
-  const section = props.section;
-  const sectionIndex = props.sectionIndex;
-  const setSectionsMap = props.setSectionsMap;
+  const section = props.section
+  const sectionIndex = props.sectionIndex
+  const setSectionsMap = props.setSectionsMap
   //const sections = props.sections;
   //const nameRef = useRef();
-  const [name, setName] = useState(section.name);
+  const [name, setName] = useState(section.name)
 
   const DeleteEquipmentButton = (pr) => {
     const handleClick = () => {
-      pr.onButtonClick(pr.equipmentIndex);
-    };
-    return <button onClick={handleClick}>Delete Equipment</button>;
-  };
+      pr.onButtonClick(pr.equipmentIndex)
+    }
+    return <button onClick={handleClick}>Delete Equipment</button>
+  }
 
   /*Event Handlers */
   const AddEquipmentButton = () => {
-    return <button onClick={onNewEquipmentClick}>Add a new equipments</button>;
-  };
+    return <button onClick={onNewEquipmentClick}>Add a new equipments</button>
+  }
 
   function onNewEquipmentClick() {
     const newEquipment = {
       recipe_id: section.recipe_id,
-      equipment_id: "",
+      equipment_id: '',
       quantity: 1,
-      uom_id: "",
+      uom_id: '',
       section_id: section.id,
-    };
+    }
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
     const newSection = {
       id: section.id,
@@ -52,17 +52,17 @@ const SectionEquipment = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       recipe_equipments: [...section.recipe_equipments, newEquipment],
-    };
-    sectionsMapCopy.set(sectionIndex, newSection);
+    }
+    sectionsMapCopy.set(sectionIndex, newSection)
 
-    setSectionsMap(sectionsMapCopy);
+    setSectionsMap(sectionsMapCopy)
   }
 
   const updateName = (e) => {
-    const value = e.target.value;
-    setName(value);
+    const value = e.target.value
+    setName(value)
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
     // Replace the current section item
     const newSection = {
       id: section.id,
@@ -70,26 +70,26 @@ const SectionEquipment = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       recipe_equipments: section.recipe_equipments,
-    };
+    }
 
-    sectionsMapCopy.set(sectionIndex, newSection);
+    sectionsMapCopy.set(sectionIndex, newSection)
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
-  console.log(section); //TODO remove logs
+  console.log(section) //TODO remove logs
 
   function onEquipmentDeleteClick(equipmentIndex) {
     //todo get index
-    const index = equipmentIndex;
-    console.log(`Index: ${index}`);
+    const index = equipmentIndex
+    console.log(`Index: ${index}`)
 
-    const newEquipments = [...section.recipe_equipments];
-    newEquipments.splice(index, 1);
-    console.log(newEquipments);
+    const newEquipments = [...section.recipe_equipments]
+    newEquipments.splice(index, 1)
+    console.log(newEquipments)
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
     const newSection = {
       id: section.id,
@@ -97,10 +97,10 @@ const SectionEquipment = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       recipe_equipments: newEquipments,
-    };
-    sectionsMapCopy.set(sectionIndex, newSection);
+    }
+    sectionsMapCopy.set(sectionIndex, newSection)
 
-    setSectionsMap(sectionsMapCopy);
+    setSectionsMap(sectionsMapCopy)
   }
 
   return (
@@ -123,13 +123,16 @@ const SectionEquipment = (props) => {
               sectionsMap={props.sectionsMap}
               setSectionsMap={setSectionsMap}
             ></RecipeEquipment>
-            <DeleteEquipmentButton onButtonClick={onEquipmentDeleteClick} equipmentIndex={index}></DeleteEquipmentButton>
+            <DeleteEquipmentButton
+              onButtonClick={onEquipmentDeleteClick}
+              equipmentIndex={index}
+            ></DeleteEquipmentButton>
           </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 SectionEquipment.propTypes = {
   section: PropTypes.object,
@@ -139,11 +142,11 @@ SectionEquipment.propTypes = {
     k1: PropTypes.arrayOf(PropTypes.string),
   }),
   setSectionsMap: PropTypes.func,
-};
+}
 
 SectionNameInput.propTypes = {
   name: PropTypes.string,
   updateName: PropTypes.func,
-};
+}
 
-export default SectionEquipment;
+export default SectionEquipment

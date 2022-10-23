@@ -1,30 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Select from "react-select";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import Select from 'react-select'
 
 class EditSubcategory extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      name: "",
-      category_id: "",
+      name: '',
+      category_id: '',
       category: {},
       subcategory: {},
       categories: [],
-    };
+    }
 
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.stripHtmlEntities = this.stripHtmlEntities.bind(this);
+    this.onChange = this.onChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.stripHtmlEntities = this.stripHtmlEntities.bind(this)
   }
 
   componentDidMount() {
     Promise.all([
-      fetch("/api/v1/categories/index"),
+      fetch('/api/v1/categories/index'),
       fetch(`/api/v1/subcategories/edit/${this.props.match.params.id}`),
     ])
       .then(([res1, res2]) => {
-        return Promise.all([res1.json(), res2.json()]);
+        return Promise.all([res1.json(), res2.json()])
       })
       .then(([res1, res2]) => {
         this.setState({
@@ -32,58 +32,58 @@ class EditSubcategory extends React.Component {
           subcategory: res2,
           category: res1.find((category) => category.id === res2.category_id),
           name: res2.name,
-          category_id: res2.category_id
-        });
-      });
+          category_id: res2.category_id,
+        })
+      })
   }
 
   stripHtmlEntities(str) {
-    return String(str).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return String(str).replace(/</g, '&lt;').replace(/>/g, '&gt;')
   }
 
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value })
   }
   handleChange = (selectedOption) => {
-    console.log("selected: " + selectedOption);
-    this.setState({ category_id: selectedOption.id, category: selectedOption });
-  };
+    console.log('selected: ' + selectedOption)
+    this.setState({ category_id: selectedOption.id, category: selectedOption })
+  }
 
   onSubmit(event) {
-    event.preventDefault();
-    const url = `/api/v1/subcategories/update/${this.props.match.params.id}`;
-    const { name, category_id } = this.state;
+    event.preventDefault()
+    const url = `/api/v1/subcategories/update/${this.props.match.params.id}`
+    const { name, category_id } = this.state
 
-    if (name.length == 0 || category_id == 0) return;
+    if (name.length == 0 || category_id == 0) return
 
     const body = {
       name,
       category_id,
-    };
+    }
     console.log(body)
 
-    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const token = document.querySelector('meta[name="csrf-token"]').content
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
-      .then((response) => this.props.history.push("/subcategories"))
-      .catch((error) => console.log(error.message));
+      .then((response) => this.props.history.push('/subcategories'))
+      .catch((error) => console.log(error.message))
   }
 
   render() {
-    const { subcategory, categories, category_id, category } = this.state;
-    console.log(category_id);
+    const { subcategory, categories, category_id, category } = this.state
+    console.log(category_id)
     return (
       <div className="container mt-5">
         <div className="row">
@@ -125,8 +125,8 @@ class EditSubcategory extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default EditSubcategory;
+export default EditSubcategory

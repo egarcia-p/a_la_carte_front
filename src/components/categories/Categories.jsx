@@ -1,60 +1,57 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 class Categories extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       categories: [],
-    };
+    }
   }
 
   componentDidMount() {
-    const url = "/api/v1/categories/index";
+    const url = '/api/v1/categories/index'
     fetch(url)
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then((response) => this.setState({ categories: response }))
-      .catch(() => this.props.history.push("/"));
+      .catch(() => this.props.history.push('/'))
   }
 
   deleteCategory(id) {
-    const { history } = this.props;
-    const url = `/api/v1/categories/destroy/${id}`;
-    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const { history } = this.props
+    const url = `/api/v1/categories/destroy/${id}`
+    const token = document.querySelector('meta[name="csrf-token"]').content
 
     fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then(() => this.componentDidMount())
-      .catch((error) => console.log(error.message));
+      .catch((error) => console.log(error.message))
   }
 
   render() {
-    const { categories } = this.state;
+    const { categories } = this.state
     const allCategories = categories.map((category, index) => (
       <tr key={index}>
         <th scope="row">{category.id}</th>
         <td>{category.name}</td>
         <td>
-          <button
-            type="button"
-            className="btn btn-warning"
-          >
+          <button type="button" className="btn btn-warning">
             <Link to={`/category/${category.id}`}>Edit Category</Link>
           </button>
           <button
@@ -66,7 +63,7 @@ class Categories extends React.Component {
           </button>
         </td>
       </tr>
-    ));
+    ))
     const noCategory = (
       <td colspan="5">
         <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
@@ -75,7 +72,7 @@ class Categories extends React.Component {
           </h4>
         </div>
       </td>
-    );
+    )
 
     return (
       <>
@@ -104,12 +101,14 @@ class Categories extends React.Component {
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
-              <tbody>{categories.length > 0 ? allCategories : noCategory}</tbody>
+              <tbody>
+                {categories.length > 0 ? allCategories : noCategory}
+              </tbody>
             </table>
           </main>
         </div>
       </>
-    );
+    )
   }
 }
-export default Categories;
+export default Categories

@@ -1,68 +1,68 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Select from "react-select";
+import React from 'react'
+import { Link } from 'react-router-dom'
+import Select from 'react-select'
 
 class NewRecipe extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      title: "",
-      subtitle: "",
-      servings: "",
-      total_time: "",
-      author: "",
-      category_id: "",
-      subcategory_id: "",
+      title: '',
+      subtitle: '',
+      servings: '',
+      total_time: '',
+      author: '',
+      category_id: '',
+      subcategory_id: '',
       categories: [],
-      category: {id: "blank", name: "Select a Category"},
+      category: { id: 'blank', name: 'Select a Category' },
       subcategories: [],
-      subcategory: {id: "blank", name: "Select a Subcategory if applies"},
-    };
+      subcategory: { id: 'blank', name: 'Select a Subcategory if applies' },
+    }
 
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.stripHtmlEntities = this.stripHtmlEntities.bind(this);
+    this.onChange = this.onChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+    this.stripHtmlEntities = this.stripHtmlEntities.bind(this)
   }
 
   componentDidMount() {
     Promise.all([
-      fetch("/api/v1/categories/index"),
-      fetch("/api/v1/subcategories/index"),
+      fetch('/api/v1/categories/index'),
+      fetch('/api/v1/subcategories/index'),
     ])
       .then(([res1, res2]) => {
-        return Promise.all([res1.json(), res2.json()]);
+        return Promise.all([res1.json(), res2.json()])
       })
       .then(([res1, res2]) => {
         this.setState({
           categories: res1,
           subcategories: res2,
-        });
-      });
+        })
+      })
   }
 
   stripHtmlEntities(str) {
-    return String(str).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return String(str).replace(/</g, '&lt;').replace(/>/g, '&gt;')
   }
 
   onChange(event) {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   handleSelectChangeCategory = (selectedOption) => {
-    console.log("selected: " + selectedOption.name);
-    this.setState({ category_id: selectedOption.id });
-    this.setState({ category: selectedOption });
-  };
+    console.log('selected: ' + selectedOption.name)
+    this.setState({ category_id: selectedOption.id })
+    this.setState({ category: selectedOption })
+  }
 
   handleSelectChangeSubcategory = (selectedOption) => {
-    console.log("selected: " + selectedOption.name);
-    this.setState({ subcategory_id: selectedOption.id });
-    this.setState({ subcategory: selectedOption });
-  };
+    console.log('selected: ' + selectedOption.name)
+    this.setState({ subcategory_id: selectedOption.id })
+    this.setState({ subcategory: selectedOption })
+  }
 
   onSubmit(event) {
-    event.preventDefault();
-    const url = "/api/v1/recipes/create";
+    event.preventDefault()
+    const url = '/api/v1/recipes/create'
     const {
       title,
       subtitle,
@@ -71,7 +71,7 @@ class NewRecipe extends React.Component {
       author,
       category_id,
       subcategory_id,
-    } = this.state;
+    } = this.state
 
     if (
       title.length == 0 ||
@@ -82,7 +82,7 @@ class NewRecipe extends React.Component {
       category_id.length == 0 ||
       subcategory_id.length == 0
     )
-      return;
+      return
 
     const body = {
       title,
@@ -93,29 +93,29 @@ class NewRecipe extends React.Component {
       author,
       category_id,
       subcategory_id,
-    };
+    }
 
-    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const token = document.querySelector('meta[name="csrf-token"]').content
     fetch(url, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then((response) => this.props.history.push(`/recipe/${response.id}`))
-      .catch((error) => console.log(error.message));
+      .catch((error) => console.log(error.message))
   }
 
   render() {
-    const { categories, subcategories, category, subcategory } = this.state;
+    const { categories, subcategories, category, subcategory } = this.state
     return (
       <div className="container mt-5">
         <div className="row">
@@ -214,8 +214,8 @@ class NewRecipe extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default NewRecipe;
+export default NewRecipe

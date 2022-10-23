@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Ingredients = (props) => {
-  const sections = props.sections; //TODO check if needed to declare as map
+  const sections = props.sections //TODO check if needed to declare as map
   //console.log(sections)
   return (
     <div>
@@ -10,12 +10,11 @@ const Ingredients = (props) => {
         <Section key={i} section={section}></Section>
       ))}
     </div>
-  );
-};
+  )
+}
 
 const Section = (props) => {
-  const section = props.section;
-
+  const section = props.section
 
   if (section.recipe_ingredients.length > 0) {
     return (
@@ -28,33 +27,34 @@ const Section = (props) => {
           ></RecipeIngredient>
         ))}
       </div>
-    );
+    )
   } else {
-    return <div></div>;
+    return <div></div>
   }
-};
+}
 
 const RecipeIngredient = (props) => {
-  const recipeIngredient = props.recipe_ingredient;
+  const recipeIngredient = props.recipe_ingredient
 
   return (
     <div>
-      {recipeIngredient.quantity} {(recipeIngredient.short_name || recipeIngredient.uom_name)} -{" "}
+      {recipeIngredient.quantity}{' '}
+      {recipeIngredient.short_name || recipeIngredient.uom_name} -{' '}
       {recipeIngredient.name}
     </div>
-  );
-};
+  )
+}
 
 Ingredients.propTypes = {
   sections: PropTypes.array,
-};
+}
 
 Section.propTypes = {
   section: PropTypes.object,
-};
+}
 
 RecipeIngredient.propTypes = {
   recipe_ingredient: PropTypes.object,
-};
+}
 
-export default Ingredients;
+export default Ingredients

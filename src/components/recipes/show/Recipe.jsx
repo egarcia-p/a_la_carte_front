@@ -1,47 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import Equipments from "./Equipments";
-import Ingredients from "./Ingredients";
-import Sections from "./Sections";
+import React, { useEffect, useState } from 'react'
+import { Link, useParams, useNavigate } from 'react-router-dom'
+import Equipments from './Equipments'
+import Ingredients from './Ingredients'
+import Sections from './Sections'
 
 function Recipe() {
-  let params = useParams();
-  const navigate = useNavigate();
-  const [recipe, setRecipe] = useState({});
+  let params = useParams()
+  const navigate = useNavigate()
+  const [recipe, setRecipe] = useState({})
 
   useEffect(() => {
-    const url = `/api/v1/recipes/show/${params.id}`;
+    const url = `/api/v1/recipes/show/${params.id}`
 
     fetch(url)
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then((response) => setRecipe(response))
-      .catch(() => navigate("/recipes"));
-  }, []);
+      .catch(() => navigate('/recipes'))
+  }, [])
 
   function deleteRecipe() {
-    const url = `/api/v1/recipes/destroy/${params.id}`;
-    const token = `$('meta[name="csrf-token"]').attr('content')`;
+    const url = `/api/v1/recipes/destroy/${params.id}`
+    const token = `$('meta[name="csrf-token"]').attr('content')`
 
     fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
-      .then(() => navigate("/recipes"))
-      .catch((error) => console.log(error.message));
+      .then(() => navigate('/recipes'))
+      .catch((error) => console.log(error.message))
   }
 
   return (
@@ -107,7 +107,7 @@ function Recipe() {
         </Link>
       </div>
     </div>
-  );
+  )
 }
 
-export default Recipe;
+export default Recipe

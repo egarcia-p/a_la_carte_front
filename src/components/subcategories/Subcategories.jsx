@@ -1,62 +1,67 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 class Subcategories extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       categories: [],
       subcategories: [],
-    };
+    }
   }
 
   componentDidMount() {
     Promise.all([
-      fetch("/api/v1/categories/index"),
-      fetch("/api/v1/subcategories/index"),
+      fetch('/api/v1/categories/index'),
+      fetch('/api/v1/subcategories/index'),
     ])
       .then(([res1, res2]) => {
-        return Promise.all([res1.json(), res2.json()]);
+        return Promise.all([res1.json(), res2.json()])
       })
       .then(([res1, res2]) => {
         this.setState({
           categories: res1,
           subcategories: res2,
-        });
-      });
+        })
+      })
   }
 
   deleteSubcategory(id) {
-    const { history } = this.props;
-    const url = `/api/v1/subcategories/destroy/${id}`;
-    const token = document.querySelector('meta[name="csrf-token"]').content;
+    const { history } = this.props
+    const url = `/api/v1/subcategories/destroy/${id}`
+    const token = document.querySelector('meta[name="csrf-token"]').content
 
     fetch(url, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "X-CSRF-Token": token,
-        "Content-Type": "application/json",
+        'X-CSRF-Token': token,
+        'Content-Type': 'application/json',
       },
     })
       .then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json()
         }
-        throw new Error("Network response was not ok.");
+        throw new Error('Network response was not ok.')
       })
       .then(() => this.componentDidMount())
-      .catch((error) => console.log(error.message));
+      .catch((error) => console.log(error.message))
   }
 
   render() {
-
-    const { subcategories, categories } = this.state;
+    const { subcategories, categories } = this.state
 
     const allSubcategories = subcategories.map((subcategory, index) => (
       <tr key={index}>
         <th scope="row">{subcategory.id}</th>
         <td>{subcategory.name}</td>
-        <td>{categories.find(category => category.id === subcategory.category_id).name}</td>
+        <td>
+          {
+            categories.find(
+              (category) => category.id === subcategory.category_id
+            ).name
+          }
+        </td>
         <td>
           <button type="button" className="btn btn-warning">
             <Link to={`/subcategory/${subcategory.id}`}>Edit Subcategory</Link>
@@ -70,7 +75,7 @@ class Subcategories extends React.Component {
           </button>
         </td>
       </tr>
-    ));
+    ))
     const noSubcategory = (
       <td colspan="5">
         <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
@@ -79,7 +84,7 @@ class Subcategories extends React.Component {
           </h4>
         </div>
       </td>
-    );
+    )
 
     return (
       <>
@@ -116,7 +121,7 @@ class Subcategories extends React.Component {
           </main>
         </div>
       </>
-    );
+    )
   }
 }
-export default Subcategories;
+export default Subcategories

@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 const RecipeEquipment = (props) => {
-  const recipe_equipment = props.recipe_equipment;
-  const section = props.section;
-  const sectionIndex = props.sectionIndex;
-  const recipeEquipmentIndex = props.recipeEquipmentIndex;
-  const setSectionsMap = props.setSectionsMap;
-  const [equipmentId, setEquipmentId] = useState(
-    recipe_equipment.equipment_id
-  );
-  const [quantity, setQuantity] = useState(recipe_equipment.quantity);
-  const [uomId, setUOMId] = useState(recipe_equipment.uom_id);
+  const recipe_equipment = props.recipe_equipment
+  const section = props.section
+  const sectionIndex = props.sectionIndex
+  const recipeEquipmentIndex = props.recipeEquipmentIndex
+  const setSectionsMap = props.setSectionsMap
+  const [equipmentId, setEquipmentId] = useState(recipe_equipment.equipment_id)
+  const [quantity, setQuantity] = useState(recipe_equipment.quantity)
+  const [uomId, setUOMId] = useState(recipe_equipment.uom_id)
 
   useEffect(() => {
-    setEquipmentId(recipe_equipment.equipment_id);
-    setQuantity(recipe_equipment.quantity);
-    setUOMId(recipe_equipment.uom_id);
+    setEquipmentId(recipe_equipment.equipment_id)
+    setQuantity(recipe_equipment.quantity)
+    setUOMId(recipe_equipment.uom_id)
   }, [props.recipe_equipment])
 
   const updateValueEquipmentId = (e) => {
-    const value = e.target.value;
-    setEquipmentId(value);
+    const value = e.target.value
+    setEquipmentId(value)
 
     //Replace section equipments
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
-    const recipeEquipmentsCopy = [...section.recipe_equipments];
+    const recipeEquipmentsCopy = [...section.recipe_equipments]
 
     recipeEquipmentsCopy.splice(recipeEquipmentIndex, 1, {
       id: recipe_equipment.id,
@@ -35,7 +33,7 @@ const RecipeEquipment = (props) => {
       quantity: recipe_equipment.quantity,
       uom_id: recipe_equipment.uom_id,
       section_id: recipe_equipment.section_id,
-    });
+    })
 
     // Replace the current section item
     sectionsMapCopy.set(sectionIndex, {
@@ -45,20 +43,20 @@ const RecipeEquipment = (props) => {
       sort_number: section.sort_number,
       steps: section.steps,
       recipe_equipments: recipeEquipmentsCopy,
-    });
+    })
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
   const updateValueUOMId = (e) => {
-    const value = e.target.value;
-    setUOMId(value);
+    const value = e.target.value
+    setUOMId(value)
 
     //Replace section equipments
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
-    const recipeEquipmentsCopy = [...section.recipe_equipments];
+    const recipeEquipmentsCopy = [...section.recipe_equipments]
 
     recipeEquipmentsCopy.splice(recipeEquipmentIndex, 1, {
       id: recipe_equipment.id,
@@ -67,7 +65,7 @@ const RecipeEquipment = (props) => {
       quantity: recipe_equipment.quantity,
       uom_id: value,
       section_id: recipe_equipment.section_id,
-    });
+    })
 
     // Replace the current section item
     sectionsMapCopy.set(sectionIndex, {
@@ -77,20 +75,20 @@ const RecipeEquipment = (props) => {
       sort_number: section.sort_number,
       steps: section.steps,
       recipe_equipments: recipeEquipmentsCopy,
-    });
+    })
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
   const updateValueQuantity = (e) => {
-    const value = e.target.value;
-    setQuantity(value);
+    const value = e.target.value
+    setQuantity(value)
 
     //Replace section equipments
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
-    const recipeEquipmentsCopy = [...section.recipe_equipments];
+    const recipeEquipmentsCopy = [...section.recipe_equipments]
 
     recipeEquipmentsCopy.splice(recipeEquipmentIndex, 1, {
       id: recipe_equipment.id,
@@ -99,7 +97,7 @@ const RecipeEquipment = (props) => {
       quantity: value,
       uom_id: recipe_equipment.uom_id,
       section_id: recipe_equipment.section_id,
-    });
+    })
 
     // Replace the current section item
     sectionsMapCopy.set(sectionIndex, {
@@ -109,11 +107,11 @@ const RecipeEquipment = (props) => {
       sort_number: section.sort_number,
       steps: section.steps,
       recipe_equipments: recipeEquipmentsCopy,
-    });
+    })
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
   return (
     <div className="recipe_equipment">
@@ -148,8 +146,8 @@ const RecipeEquipment = (props) => {
         onChange={updateValueQuantity}
       />
     </div>
-  );
-};
+  )
+}
 
 RecipeEquipment.propTypes = {
   recipe_equipment: PropTypes.object,
@@ -161,6 +159,6 @@ RecipeEquipment.propTypes = {
     k1: PropTypes.arrayOf(PropTypes.string),
   }),
   setSectionsMap: PropTypes.func,
-};
+}
 
-export default RecipeEquipment;
+export default RecipeEquipment

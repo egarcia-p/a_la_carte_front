@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 //import Step from "./Step";
-import PropTypes from "prop-types";
-import Step from "./Step";
+import PropTypes from 'prop-types'
+import Step from './Step'
 
 const SectionNameInput = (props) => {
   return (
@@ -13,41 +13,38 @@ const SectionNameInput = (props) => {
       required
       onChange={props.updateName}
     />
-  );
-};
+  )
+}
 
 const Section = (props) => {
-  const section = props.section;
-  const sectionIndex = props.sectionIndex;
-  const setSectionsMap = props.setSectionsMap;
+  const section = props.section
+  const sectionIndex = props.sectionIndex
+  const setSectionsMap = props.setSectionsMap
   //const section = new Map(sectionsMap).get(sectionIndex);
   //const sections = props.sections;
   //const nameRef = useRef();
-  const [name, setName] = useState(section.name);
+  const [name, setName] = useState(section.name)
 
   /*Event Handlers */
   const AddStepButton = () => {
-    return <button onClick={onNewStepClick}>Add a new step</button>;
-  };
+    return <button onClick={onNewStepClick}>Add a new step</button>
+  }
 
   const DeleteStepButton = (pr) => {
-
     const handleClick = () => {
-      pr.onButtonClick(pr.stepIndex);
+      pr.onButtonClick(pr.stepIndex)
     }
-    return (
-      <button onClick={handleClick}>Delete Step</button>
-    );
-  };
+    return <button onClick={handleClick}>Delete Step</button>
+  }
 
   function onNewStepClick() {
     const newStep = {
-      description: "Fill Description",
+      description: 'Fill Description',
       step_number: section.steps.length + 1,
       recipe_id: section.recipe_id,
-    };
+    }
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
     const newSection = {
       id: section.id,
@@ -55,22 +52,22 @@ const Section = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       steps: [...section.steps, newStep],
-    };
-    sectionsMapCopy.set(sectionIndex, newSection);
+    }
+    sectionsMapCopy.set(sectionIndex, newSection)
 
-    setSectionsMap(sectionsMapCopy);
+    setSectionsMap(sectionsMapCopy)
   }
 
   function onStepDeleteClick(stepIndex) {
     //todo get index
-    const index = stepIndex;
+    const index = stepIndex
     console.log(`Index: ${index}`)
 
     const newSteps = [...section.steps]
-    newSteps.splice(index, 1);
-    console.log(newSteps);
+    newSteps.splice(index, 1)
+    console.log(newSteps)
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
     const newSection = {
       id: section.id,
@@ -78,17 +75,17 @@ const Section = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       steps: newSteps,
-    };
-    sectionsMapCopy.set(sectionIndex, newSection);
+    }
+    sectionsMapCopy.set(sectionIndex, newSection)
 
-    setSectionsMap(sectionsMapCopy);
+    setSectionsMap(sectionsMapCopy)
   }
 
   const updateName = (e) => {
-    const value = e.target.value;
-    setName(value);
+    const value = e.target.value
+    setName(value)
 
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
     // Replace the current section item
     const newSection = {
       id: section.id,
@@ -96,15 +93,15 @@ const Section = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       steps: section.steps,
-    };
+    }
 
-    sectionsMapCopy.set(sectionIndex, newSection);
+    sectionsMapCopy.set(sectionIndex, newSection)
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
-  console.log(section);
+  console.log(section)
 
   return (
     <div className="section">
@@ -116,7 +113,7 @@ const Section = (props) => {
       <AddStepButton />
       <div className="steps">
         {section.steps.map((step, index) => (
-          <div key={index}  className="step">
+          <div key={index} className="step">
             <Step
               key={index}
               step={step}
@@ -126,13 +123,16 @@ const Section = (props) => {
               sectionsMap={props.sectionsMap}
               setSectionsMap={setSectionsMap}
             ></Step>
-            <DeleteStepButton onButtonClick={onStepDeleteClick} stepIndex={index}></DeleteStepButton>
+            <DeleteStepButton
+              onButtonClick={onStepDeleteClick}
+              stepIndex={index}
+            ></DeleteStepButton>
           </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
 Section.propTypes = {
   section: PropTypes.object,
@@ -143,12 +143,11 @@ Section.propTypes = {
   }),
   setSectionsMap: PropTypes.func,
   stepIndex: PropTypes.number,
-};
+}
 
 SectionNameInput.propTypes = {
   name: PropTypes.string,
   updateName: PropTypes.func,
-};
+}
 
-
-export default Section;
+export default Section

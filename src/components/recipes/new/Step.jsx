@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Step = (props) => {
-  const step = props.step;
-  const section = props.section;
-  const sectionIndex = props.sectionIndex;
-  const stepIndex = props.stepIndex;
-  const setSectionsMap = props.setSectionsMap;
-  const [stepNumber, setStepNumber] = useState(step.step_number);
-  const [description, setDescription] = useState(step.description);
+  const step = props.step
+  const section = props.section
+  const sectionIndex = props.sectionIndex
+  const stepIndex = props.stepIndex
+  const setSectionsMap = props.setSectionsMap
+  const [stepNumber, setStepNumber] = useState(step.step_number)
+  const [description, setDescription] = useState(step.description)
 
   useEffect(() => {
-    setStepNumber(step.step_number);
-    setDescription(step.description);
+    setStepNumber(step.step_number)
+    setDescription(step.description)
   }, [props.step])
 
   const updateValueStepNumber = (e) => {
-    const value = e.target.value;
-    setStepNumber(value);
+    const value = e.target.value
+    setStepNumber(value)
 
     //Replace section steps
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections array
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections array
 
-    const stepsCopy = [...section.steps];
+    const stepsCopy = [...section.steps]
 
     stepsCopy.splice(stepIndex, 1, {
       id: step.id,
@@ -30,7 +30,7 @@ const Step = (props) => {
       section_id: step.section_id,
       step_number: value,
       description: step.description,
-    });
+    })
 
     // Replace the current section item
     sectionsMapCopy.set(sectionIndex, {
@@ -39,20 +39,20 @@ const Step = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       steps: stepsCopy,
-    });
+    })
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
   const updateValueDescription = (e) => {
-    const value = e.target.value;
-    setDescription(value);
+    const value = e.target.value
+    setDescription(value)
 
     //Replace section steps
-    const sectionsMapCopy = new Map(props.sectionsMap); // Get a copy of the sections map
+    const sectionsMapCopy = new Map(props.sectionsMap) // Get a copy of the sections map
 
-    const stepsCopy = [...section.steps];
+    const stepsCopy = [...section.steps]
 
     stepsCopy.splice(stepIndex, 1, {
       id: step.id,
@@ -60,7 +60,7 @@ const Step = (props) => {
       section_id: step.section_id,
       step_number: step.step_number,
       description: value,
-    });
+    })
 
     // Replace the current section item
     sectionsMapCopy.set(sectionIndex, {
@@ -69,11 +69,11 @@ const Step = (props) => {
       recipe_id: section.recipe_id,
       sort_number: section.sort_number,
       steps: stepsCopy,
-    });
+    })
 
     // Update the parent state
-    setSectionsMap(sectionsMapCopy);
-  };
+    setSectionsMap(sectionsMapCopy)
+  }
 
   return (
     <div className="step">
@@ -98,8 +98,8 @@ const Step = (props) => {
         onChange={updateValueDescription}
       />
     </div>
-  );
-};
+  )
+}
 
 Step.propTypes = {
   step: PropTypes.object,
@@ -108,9 +108,9 @@ Step.propTypes = {
   stepIndex: PropTypes.number,
   sectionsMap: PropTypes.shape({
     k0: PropTypes.arrayOf(PropTypes.number),
-    k1: PropTypes.arrayOf(PropTypes.string)
+    k1: PropTypes.arrayOf(PropTypes.string),
   }),
   setSectionsMap: PropTypes.func,
-};
+}
 
-export default Step;
+export default Step
