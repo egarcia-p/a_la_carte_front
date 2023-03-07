@@ -9,13 +9,20 @@ import LogoutButton from "./logout";
 import Profile from "./profile";
 //import reportWebVitals from './reportWebVitals';
 
+const domain = process.env.REACT_APP_AUTH0_DOMAIN;
+const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
+const redirectUri = process.env.REACT_APP_AUTH0_CALLBACK_URL;
+const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <Auth0Provider
-    domain="dev-gcxsr88f47sqjgcs.us.auth0.com"
-    clientId="76ELM7OOVDUhyp5cP1hEQauqcJnDiZhG"
+    domain={domain}
+    clientId={clientId}
+    audience= {audience}
     authorizationParams={{
-      redirect_uri: window.location.origin
+      //audience: {audience},
+      redirect_uri: window.location.origin,
     }}
   >
   <LoginButton />
