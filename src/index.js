@@ -11,7 +11,7 @@ import Profile from "./profile";
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN;
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
-const redirectUri = process.env.REACT_APP_AUTH0_CALLBACK_URL;
+//const redirectUri = process.env.REACT_APP_AUTH0_CALLBACK_URL;
 const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
@@ -19,9 +19,9 @@ root.render(
   <Auth0Provider
     domain={domain}
     clientId={clientId}
-    audience= {audience}
     authorizationParams={{
-      //audience: {audience},
+      audience: audience,
+      scope: "openid profile read:recipe",
       redirect_uri: window.location.origin,
     }}
   >
