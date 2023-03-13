@@ -1,22 +1,41 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import API from '../../api'
+import { getProtectedResource } from "../../services/recipes.service";
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState([])
 
-  useEffect(() => {
-    getRecipes()
-  }, [])
+  const { getAccessTokenSilently } = useAuth0();
 
-  const getRecipes = () => {
-    API.get(`recipes/index`)
-      .then((res) => {
-        console.log(res)
-        console.log(res.data)
-        setRecipes(res.data)
-      })
-  }
+  useEffect(() => {
+    let isMounted = true;
+
+
+    const getRecipes = async () => {
+      const accessToken = await getAccessTokenSilently();
+      const { data, error } = await getProtectedResource(accessToken);
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (data) {
+        setRecipes(data);
+      }
+
+      if (error) {
+        setRecipes(JSON.stringify(error, null, 2));
+      }
+    };
+
+    getRecipes();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [getAccessTokenSilently]);
 
   
 
