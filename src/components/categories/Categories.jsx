@@ -5,79 +5,87 @@ import { deleteProtectedResource, getProtectedResource } from '../../services/ca
 
 export default function Categories() {
   const [categories, setCategories] = useState([])
+  const [refreshData, setRefreshData] = useState();
 
   const { getAccessTokenSilently } = useAuth0();
+
+  const getCategories = async () => {
+    const accessToken = await getAccessTokenSilently();
+    const { data, error } = await getProtectedResource(accessToken);
+
+    if (data) {
+      setCategories(data);
+    }
+
+    if (error) {
+      setCategories(JSON.stringify(error, null, 2));
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
 
 
-    const getCategories = async () => {
-      const accessToken = await getAccessTokenSilently();
-      const { data, error } = await getProtectedResource(accessToken);
+    const getCategoriesInt = async () => {
+      getCategories();
 
       if (!isMounted) {
         return;
       }
 
-      if (data) {
-        setCategories(data);
-      }
-
-      if (error) {
-        setCategories(JSON.stringify(error, null, 2));
-      }
     };
 
-    getCategories();
+    getCategoriesInt();
 
     return () => {
       isMounted = false;
     };
   }, [getAccessTokenSilently]);
 
-  const deleteCategory = (id) => {
-    const deleteCategoryFunc = async () => {
-      const accessToken = await getAccessTokenSilently();
-      const { data, error } = await deleteProtectedResource(accessToken,id);
+  const deleteCategoryFunc = async (id) => {
+    const accessToken = await getAccessTokenSilently();
+    const { data, error } = await deleteProtectedResource(accessToken,id);
 
 
-      if (data) {
-        setCategories(data);
-      }
+    if (data) {
+      setRefreshData(!refreshData)
+      return data;
+    }
 
-      if (error) {
-        setCategories(JSON.stringify(error, null, 2));
-      }
-    };
-    deleteCategoryFunc();
+    if (error) {
+      return error
+    }
+  };
 
-    //TBD DELETE process
-   /*  if (data.ok) {
-      return response.json()
-    }     
-    throw new Error('Network response was not ok.') */
+  useEffect(() => {
+    //TODO a better way to handle multiple requeswt for refresh, since now it calls 4 times
+    getCategories();
+  }, [refreshData]
+  )
 
-  }
-
-  const allCategories = categories.map((category, index) => (
-    <tr key={index}>
-      <th scope="row">{category.id}</th>
-      <td>{category.name}</td>
-      <td>
-        <button type="button" className="btn btn-warning">
-          <Link to={`/category/${category.id}`}>Edit Category</Link>
-        </button>
-        <button
-          type="button"
-          className="btn btn-danger"
-          onClick={() => this.deleteCategory(category.id)}
-        >
-          Delete Category
-        </button>
-      </td>
-    </tr>
-  ))
+  function getAllCategories(categories) {
+    console.log(categories)
+    return(
+    categories.map((category, index) => (
+      <tr key={index}>
+        <th scope="row">{category.id}</th>
+        <td>{category.name}</td>
+        <td>
+          <button type="button" className="btn btn-warning">
+            <Link to={`/category/${category.id}`}>Edit Category</Link>
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => deleteCategoryFunc(category.id)}
+          >
+            Delete Category
+          </button>
+        </td>
+      </tr>
+        ))
+        )
+  } 
   const noCategory = (
     <td colspan="5">
       <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
@@ -116,7 +124,7 @@ export default function Categories() {
               </tr>
             </thead>
             <tbody>
-              {categories.length > 0 ? allCategories : noCategory}
+              {categories.length > 0 ? getAllCategories(categories) : noCategory}
             </tbody>
           </table>
         </main>
