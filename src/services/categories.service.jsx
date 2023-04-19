@@ -38,6 +38,27 @@ export const deleteProtectedResource = async (accessToken, id) =>{
   };
 }
 
+export const createProtectedResource = async (accessToken, data) =>{
+  const config = {
+    url: `${apiServerUrl}/api/v1/categories/create`,
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    data,
+  };
+
+  console.log(config);
+
+  const { data: createdData, error } = await callExternalApi({ config });
+
+  return {
+    data: createdData || null,
+    error,
+  };
+}
+
 export const getAdminResource = async (accessToken) => {
   const config = {
     url: `${apiServerUrl}/api/messages/admin`, //TODO check admin, maybe update categories??

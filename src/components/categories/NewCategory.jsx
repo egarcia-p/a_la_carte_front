@@ -1,74 +1,50 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { createProtectedResource } from '../../services/categories.service'
+import { useForm } from "react-hook-form";
 
-class NewCategory extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      name: '',
-    }
 
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
-    this.stripHtmlEntities = this.stripHtmlEntities.bind(this)
-  }
+export default function NewCategory() {
+  const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
-  stripHtmlEntities(str) {
-    return String(str).replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  }
+  const { getAccessTokenSilently } = useAuth0();
 
-  onChange(event) {
-    this.setState({ [event.target.name]: event.target.value })
-  }
 
-  onSubmit(event) {
-    event.preventDefault()
-    const url = '/api/v1/categories/create'
-    const { name } = this.state
-
+  const onFormSubmit = async (data) => {
+    const name = data.name;
     if (name.length == 0) return
 
-    const body = {
-      name,
-    }
+    const accessToken = await getAccessTokenSilently();
 
-    const token = document.querySelector('meta[name="csrf-token"]').content
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'X-CSRF-Token': token,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        }
-        throw new Error('Network response was not ok.')
-      })
-      .then((response) => this.props.history.push('/categories'))
-      .catch((error) => console.log(error.message)) //maybe add error messages
+    const {response, error} = createProtectedResource(accessToken, JSON.stringify(data));
+
+    if(!error){
+    navigate("/categories");
+    }
   }
 
-  render() {
-    return (
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-sm-12 col-lg-6 offset-lg-3">
-            <h1 className="font-weight-normal mb-5">Add a new category</h1>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <label htmlFor="categoryName">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  id="categoryName"
-                  className="form-control"
-                  required
-                  onChange={this.onChange}
-                />
-              </div>
+  const onErrors = errors => console.error(errors);
+
+
+  return (
+    <div className="container mt-5">
+      <div className="row">
+        <div className="col-sm-12 col-lg-6 offset-lg-3">
+          <h1 className="font-weight-normal mb-5">Add a new category</h1>
+          <form onSubmit={handleSubmit(onFormSubmit,onErrors)}>
+            <div className="form-group">
+              <label htmlFor="categoryName">Name</label>
+              <input
+                type="text"
+                name="name"
+                id="categoryName"
+                className="form-control"
+                placeholder="Enter category name"
+                {...register('name')}
+              />
+            </div>
               <button type="submit" className="btn custom-button mt-3">
                 Create Category
               </button>
@@ -79,8 +55,5 @@ class NewCategory extends React.Component {
           </div>
         </div>
       </div>
-    )
-  }
+           )
 }
-
-export default NewCategory
