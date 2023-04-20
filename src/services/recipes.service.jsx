@@ -37,6 +37,28 @@ export const getProtectedResource = async (accessToken) => {
   };
 };
 
+export const createProtectedResource = async (accessToken,data) => {
+  const config = {
+    url: `${apiServerUrl}/api/v1/recipes/create`,
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    data,
+  };
+
+  const { data: responseData, error } = await callExternalApi({ config });
+
+  return {
+    data: responseData || null,
+    error,
+
+  };
+
+};
+
+
 export const getAdminResource = async (accessToken) => {
   const config = {
     url: `${apiServerUrl}/api/messages/admin`, //TODO check admin, maybe update ingredients?
