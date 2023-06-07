@@ -13,8 +13,19 @@ export default () => (
         <Link to="/recipes" className="btn btn-lg custom-button" role="button">
           View Recipes
         </Link>
-        <Link to="/categories" className="btn btn-lg custom-button" role="button">
+        <Link
+          to="/categories"
+          className="btn btn-lg custom-button"
+          role="button"
+        >
           View Categories
+        </Link>
+        <Link
+          to="/subcategories"
+          className="btn btn-lg custom-button"
+          role="button"
+        >
+          View Subcategories
         </Link>
       </div>
     </div>

@@ -1,68 +1,68 @@
 import { useParams } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { getCategoryResource, updateProtectedResource } from '../../services/categories.service';
-import { useForm } from 'react-hook-form';
-import { useAuth0 } from '@auth0/auth0-react';
-
+import {
+  getCategoryResource,
+  updateProtectedResource,
+} from '../../services/categories.service'
+import { useForm } from 'react-hook-form'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export default function EditCategory() {
-  const navigate = useNavigate();
-  const [category, setCategory] = useState([]);
-  const {id} = useParams();
-  const {register, handleSubmit, setValue} = useForm();
+  const navigate = useNavigate()
+  const [category, setCategory] = useState([])
+  const { id } = useParams()
+  const { register, handleSubmit, setValue } = useForm()
 
-  const {getAccessTokenSilently} = useAuth0();
+  const { getAccessTokenSilently } = useAuth0()
 
   const getCategory = async (id) => {
-    const token = await getAccessTokenSilently();
-    const {data, error} = await getCategoryResource(token,id);
+    const token = await getAccessTokenSilently()
+    const { data, error } = await getCategoryResource(token, id)
 
     if (data) {
-      setCategory(data);
-      setValue('name', data.name);
+      setCategory(data)
+      setValue('name', data.name)
     }
 
     if (error) {
-      setCategory(error); //TODO error handling
+      setCategory(error) //TODO error handling
     }
   }
 
   useEffect(() => {
-    let isMounted = true;
+    let isMounted = true
 
     const getCategoryInt = async () => {
-      getCategory(id);
+      getCategory(id)
 
       if (!isMounted) {
-        return;
+        return
       }
+    }
 
-    };
-
-    getCategoryInt();
+    getCategoryInt()
 
     return () => {
-      isMounted = false;
-    };
-  }, [getAccessTokenSilently]);
-  
+      isMounted = false
+    }
+  }, [getAccessTokenSilently])
+
   const onFormSubmit = async (data) => {
-    const name = data.name;
-    data.id = id;
+    const name = data.name
+    data.id = id
     if (name.length == 0) return
 
-    const accessToken = await getAccessTokenSilently();
+    const accessToken = await getAccessTokenSilently()
 
-    const {response, error} = updateProtectedResource(accessToken, data);
+    const { response, error } = updateProtectedResource(accessToken, data)
 
-    if(!error){
-    navigate("/categories");
+    if (!error) {
+      navigate('/categories')
     }
   }
 
-  const onErrors = errors => console.error(errors);
-
+  const onErrors = (errors) => console.error(errors)
 
   return (
     <div className="container mt-5">

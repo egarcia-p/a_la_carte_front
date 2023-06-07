@@ -1,46 +1,42 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getProtectedResource } from "../../services/recipes.service";
+import { getProtectedResource } from '../../services/recipes.service'
 
 export default function Recipes() {
   const [recipes, setRecipes] = useState([])
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0()
 
   useEffect(() => {
-    let isMounted = true;
-
+    let isMounted = true
 
     const getRecipes = async () => {
-      const accessToken = await getAccessTokenSilently();
-      const { data, error } = await getProtectedResource(accessToken);
+      const accessToken = await getAccessTokenSilently()
+      const { data, error } = await getProtectedResource(accessToken)
 
       if (!isMounted) {
-        return;
+        return
       }
 
       if (data) {
-        setRecipes(data);
+        setRecipes(data)
       }
 
       if (error) {
-        setRecipes(JSON.stringify(error, null, 2));
+        setRecipes(JSON.stringify(error, null, 2))
       }
-    };
+    }
 
-    getRecipes();
+    getRecipes()
 
     return () => {
-      isMounted = false;
-    };
-  }, [getAccessTokenSilently]);
-
-  
+      isMounted = false
+    }
+  }, [getAccessTokenSilently])
 
   const getAllRecipes = (recipes) => {
-    const allRecipes= recipes.map((recipe, index) => (
-      
+    const allRecipes = recipes.map((recipe, index) => (
       <div key={index} className="col-md-6 col-lg-4">
         <div className="card mb-4">
           <img
@@ -64,13 +60,12 @@ export default function Recipes() {
         </h4>
       </div>
     )
-    if (allRecipes === undefined){
-      return noRecipe;
-    }else {
-      return allRecipes;
+    if (allRecipes === undefined) {
+      return noRecipe
+    } else {
+      return allRecipes
     }
-  } 
-  
+  }
 
   return (
     <>
@@ -93,7 +88,7 @@ export default function Recipes() {
           </div>
           <div className="row">
             {/* {recipes.length > 0 ? allRecipes : noRecipe} */}
-            {recipes.length > 0? getAllRecipes(recipes): "Not Found"}
+            {recipes.length > 0 ? getAllRecipes(recipes) : 'Not Found'}
           </div>
           <Link to="/" className="btn btn-link">
             Home

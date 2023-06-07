@@ -1,32 +1,32 @@
-import axios from "axios";
+import axios from 'axios'
 
 export const callExternalApi = async (options) => {
   try {
-    const response = await axios(options.config);
-    const { data } = response;
+    const response = await axios(options.config)
+    const { data } = response
 
     return {
       data,
       error: null,
-    };
+    }
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      const axiosError = error;
+      const axiosError = error
 
-      const { response } = axiosError;
+      const { response } = axiosError
 
-      let message = "http request failed";
+      let message = 'http request failed'
 
       if (response && response.statusText) {
-        message = response.statusText;
+        message = response.statusText
       }
 
       if (axiosError.message) {
-        message = axiosError.message;
+        message = axiosError.message
       }
 
       if (response && response.data && response.data.message) {
-        message = response.data.message;
+        message = response.data.message
       }
 
       return {
@@ -34,7 +34,7 @@ export const callExternalApi = async (options) => {
         error: {
           message,
         },
-      };
+      }
     }
 
     return {
@@ -42,6 +42,6 @@ export const callExternalApi = async (options) => {
       error: {
         message: error.message,
       },
-    };
+    }
   }
-};
+}

@@ -1,72 +1,70 @@
-import { useAuth0 } from '@auth0/auth0-react';
+import { useAuth0 } from '@auth0/auth0-react'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { deleteProtectedResource, getProtectedResource } from '../../services/categories.service';
+import {
+  deleteProtectedResource,
+  getProtectedResource,
+} from '../../services/categories.service'
 
 export default function Categories() {
   const [categories, setCategories] = useState([])
-  const [refreshData, setRefreshData] = useState();
+  const [refreshData, setRefreshData] = useState()
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0()
 
   const getCategories = async () => {
-    const accessToken = await getAccessTokenSilently();
-    const { data, error } = await getProtectedResource(accessToken);
+    const accessToken = await getAccessTokenSilently()
+    const { data, error } = await getProtectedResource(accessToken)
 
     if (data) {
-      setCategories(data);
+      setCategories(data)
     }
 
     if (error) {
-      setCategories(JSON.stringify(error, null, 2));
+      setCategories(JSON.stringify(error, null, 2))
     }
-  };
+  }
 
   useEffect(() => {
-    let isMounted = true;
-
+    let isMounted = true
 
     const getCategoriesInt = async () => {
-      getCategories();
+      getCategories()
 
       if (!isMounted) {
-        return;
+        return
       }
+    }
 
-    };
-
-    getCategoriesInt();
+    getCategoriesInt()
 
     return () => {
-      isMounted = false;
-    };
-  }, [getAccessTokenSilently]);
+      isMounted = false
+    }
+  }, [getAccessTokenSilently])
 
   const deleteCategoryFunc = async (id) => {
-    const accessToken = await getAccessTokenSilently();
-    const { data, error } = await deleteProtectedResource(accessToken,id);
-
+    const accessToken = await getAccessTokenSilently()
+    const { data, error } = await deleteProtectedResource(accessToken, id)
 
     if (data) {
       setRefreshData(!refreshData)
-      return data;
+      return data
     }
 
     if (error) {
       return error
     }
-  };
+  }
 
   useEffect(() => {
     //TODO a better way to handle multiple requeswt for refresh, since now it calls 4 times
-    getCategories();
-  }, [refreshData]
-  )
+    getCategories()
+  }, [refreshData])
 
   function getAllCategories(categories) {
     console.log(categories)
-    return(
-    categories.map((category, index) => (
+    return categories.map((category, index) => (
       <tr key={index}>
         <th scope="row">{category.id}</th>
         <td>{category.name}</td>
@@ -83,9 +81,8 @@ export default function Categories() {
           </button>
         </td>
       </tr>
-        ))
-        )
-  } 
+    ))
+  }
   const noCategory = (
     <td colspan="5">
       <div className="vw-100 vh-50 d-flex align-items-center justify-content-center">
@@ -124,7 +121,9 @@ export default function Categories() {
               </tr>
             </thead>
             <tbody>
-              {categories.length > 0 ? getAllCategories(categories) : noCategory}
+              {categories.length > 0
+                ? getAllCategories(categories)
+                : noCategory}
             </tbody>
           </table>
         </main>
